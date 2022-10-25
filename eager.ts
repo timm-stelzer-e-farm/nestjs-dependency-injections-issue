@@ -52,6 +52,7 @@ async function main() {
 
     await db.insert();
     logger.log("Success!");
+    await context.close();
 }
 
 main();
