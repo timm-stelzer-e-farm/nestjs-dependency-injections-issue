@@ -9,18 +9,19 @@ const dbName = 'bar';
 @Injectable()
 export class DatabaseService {
     private db!: Mongo.Db;
-    private test!: Mongo.Collection<any>;
+    private logger = new Logger("Database");
 
     constructor(private moduleRef: ModuleRef) {}
 
-    onModuleInit() {
+    async onModuleInit() {
+        this.logger.log("onModuleInit");
         this.db = this.moduleRef.get(getDbToken(dbName));
-        this.test = this.db.collection('test');
     }
 
-    async insert(): Promise<void> {
-        await this.test.insertOne({qux: 42});
+    async stats(): Promise<void> {
+        this.logger.log(await this.db.stats());
     }
+
 }
 
 @Module({
@@ -50,8 +51,8 @@ async function main() {
     const moduleRef = await loader.load(() => DatabaseModule);
     const logger = new Logger("Root");
     const db = moduleRef.get(DatabaseService);
+    await db.stats();
 
-    await db.insert();
     logger.log("Success!");
     await context.close();
 }
