@@ -23,12 +23,6 @@ export class DatabaseService {
 }
 
 @Module({
-    providers: [DatabaseService],
-    exports: [DatabaseService],
-})
-export class DatabaseModule {}
-
-@Module({
     imports: [
         MongoModule.forRootAsync({
             useFactory() {
@@ -42,7 +36,12 @@ export class DatabaseModule {}
         }),
         DatabaseModule,
     ],
+    providers: [DatabaseService],
+    exports: [DatabaseService],
 })
+export class DatabaseModule {}
+
+@Module({})
 export class Root {}
 
 async function main() {
