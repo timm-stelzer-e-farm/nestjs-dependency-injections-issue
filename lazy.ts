@@ -1,7 +1,7 @@
 import * as Mongo from 'mongodb';
 import {InjectDb, MongoModule} from 'nest-mongodb';
-import {Injectable, Logger, Module} from '@nestjs/common';
-import {LazyModuleLoader, NestFactory} from '@nestjs/core';
+import {Global, Injectable, Logger, Module} from '@nestjs/common';
+import {LazyModuleLoader, ModuleRef, NestFactory} from '@nestjs/core';
 
 const connectionName = 'foo';
 const databaseName = 'bar';
@@ -23,12 +23,6 @@ export class DatabaseService {
 }
 
 @Module({
-    providers: [DatabaseService],
-    exports: [DatabaseService],
-})
-export class DatabaseModule {}
-
-@Module({
     imports: [
         MongoModule.forRootAsync({
             useFactory() {
@@ -41,7 +35,12 @@ export class DatabaseModule {}
             connectionName,
         }),
     ],
+    providers: [DatabaseService],
+    exports: [DatabaseService],
 })
+export class DatabaseModule {}
+
+@Module({})
 export class Root {}
 
 async function main() {
