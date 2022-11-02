@@ -4,7 +4,7 @@ import {Injectable, Logger, Module} from '@nestjs/common';
 import {LazyModuleLoader, ModuleRef, NestFactory} from '@nestjs/core';
 
 const connectionName = 'foo';
-const dbName = 'bar';
+const dbName = 'test';
 
 @Injectable()
 export class DatabaseService {
@@ -13,9 +13,9 @@ export class DatabaseService {
 
     constructor(private moduleRef: ModuleRef) {}
 
-    async onModuleInit() {
+    onModuleInit() {
         this.logger.log("onModuleInit");
-        this.db = this.moduleRef.get(getDbToken(dbName));
+        this.db = this.moduleRef.get(getDbToken(connectionName), { strict: false });
     }
 
     async stats(): Promise<void> {
@@ -51,6 +51,7 @@ async function main() {
     const moduleRef = await loader.load(() => DatabaseModule);
     const logger = new Logger("Root");
     const db = moduleRef.get(DatabaseService);
+    db.onModuleInit();
     await db.stats();
 
     logger.log("Success!");
