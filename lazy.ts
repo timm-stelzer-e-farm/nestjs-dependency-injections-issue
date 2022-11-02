@@ -1,19 +1,20 @@
 import * as Mongo from 'mongodb';
-import {InjectDb, MongoModule} from 'nest-mongodb';
+import {getDbToken, InjectDb, MongoModule} from 'nest-mongodb';
 import {Injectable, Logger, Module} from '@nestjs/common';
-import {LazyModuleLoader, NestFactory} from '@nestjs/core';
+import {LazyModuleLoader, ModuleRef, NestFactory} from '@nestjs/core';
 
 const connectionName = 'foo';
-const databaseName = 'bar';
+const dbName = 'bar';
 
 @Injectable()
 export class DatabaseService {
-    private readonly test: Mongo.Collection<any>;
+    private db!: Mongo.Db;
+    private test!: Mongo.Collection<any>;
 
-    constructor(
-        @InjectDb(connectionName)
-        private readonly db: Mongo.Db,
-    ) {
+    constructor(private moduleRef: ModuleRef) {}
+
+    onModuleInit() {
+        this.db = this.moduleRef.get(getDbToken(dbName));
         this.test = this.db.collection('test');
     }
 
@@ -29,7 +30,7 @@ export class DatabaseService {
                 return {
                     connectionName,
                     uri: 'mongodb://root:password@localhost:27017',
-                    dbName: databaseName,
+                    dbName,
                 };
             },
             connectionName,
