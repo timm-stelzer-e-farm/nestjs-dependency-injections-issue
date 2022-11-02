@@ -34,14 +34,13 @@ export class DatabaseService {
             },
             connectionName,
         }),
-        DatabaseModule,
     ],
     providers: [DatabaseService],
     exports: [DatabaseService],
 })
 export class DatabaseModule {}
 
-@Module({})
+@Module({imports: [DatabaseModule]})
 export class Root {}
 
 async function main() {

@@ -13,8 +13,8 @@
         "typescript": "^4.8.4"
     },
     "dependencies": {
-        "@nestjs/common": "9.1.2",
-        "@nestjs/core": "9.1.2",
+        "@nestjs/common": "9.1.6",
+        "@nestjs/core": "9.1.6",
         "mongodb": "^4.10.0",
         "nest-mongodb": "^6.4.0",
         "reflect-metadata": "^0.1.13",
