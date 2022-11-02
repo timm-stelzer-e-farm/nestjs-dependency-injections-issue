@@ -1,7 +1,7 @@
 import * as Mongo from 'mongodb';
 import {InjectDb, MongoModule} from 'nest-mongodb';
-import {Global, Injectable, Logger, Module} from '@nestjs/common';
-import {LazyModuleLoader, ModuleRef, NestFactory} from '@nestjs/core';
+import {Injectable, Logger, Module} from '@nestjs/common';
+import {LazyModuleLoader, NestFactory} from '@nestjs/core';
 
 const connectionName = 'foo';
 const databaseName = 'bar';
